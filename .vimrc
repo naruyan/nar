@@ -14,8 +14,9 @@ syntax on
 filetype on
 filetype plugin on
 filetype indent on
-set hlsearch
+set nohlsearch
 set incsearch
+set wrapscan
 set number
 set hidden
 runtime macros/matchit.vim
@@ -34,8 +35,21 @@ set expandtab
 set shiftwidth=4
 set softtabstop=4
 set ruler
+set foldenable
+set foldmethod=marker
+set viminfo=
+set showcmd
+set autoread
+set laststatus=2
 source $VIMRUNTIME/mswin.vim
-source ~/.vim/projects/projects.vim
+
+if filereadable("~/.vim/projects/projects.vim")
+    source ~/.vim/projects/projects.vim
+endif
+
+if version >= 703
+    set cryptmethod=blowfish
+endif
 
 let mapleader = "\\"
 
@@ -43,6 +57,8 @@ let Tlist_Use_Right_Window = 1
 let Tlist_File_Fold_Auto_Close = 1
 let g:Tlist_WinWidth = 24
 let g:Tlist_Compact_Format = 1
+
+call pathogen#runtime_append_all_bundles()
 
 let g:SrcExpl_winHeight = 8
 let g:SrcExpl_refreshTime = 1
@@ -77,6 +93,18 @@ let g:DirDiffIgnoreCase = 1
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_auto_delimiter = 1
 
+autocmd FileType ada setlocal omnifunc=adacomplete#Complete
+"autocmd FileType c setlocal omnifunc=ccomplete#Complete
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType sql setlocal omnifunc=sqlcomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType * if &l:omnifunc == '' | setlocal omnifunc=syntaxcomplete#Complete | endif
+
 map <Home> ^
 imap <Home> <Esc>^i
 nnoremap <C-e> 5<C-e>
@@ -86,8 +114,12 @@ xmap <S-Tab> <gv
 smap <Tab> <C-g>>gv<C-g>
 smap <S-Tab> <C-g><gv<C-g>
 
+cmap w!! %!sudo tee > /dev/null %
+
 nmap <Leader>tmp <Esc>:setlocal buftype=nofile<CR>:setlocal bufhidden=hide<CR>:setlocal noswapfile<CR>
 nmap <Leader>cd <Esc>:cd %:p:h<CR>
+
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
 nmap <Leader>tag <Esc>:TlistToggle<CR>
 nmap <Leader>nerd <Esc>:NERDTreeToggle<CR>
@@ -141,7 +173,7 @@ nmap <Leader>uc <Esc>:call NEKOGetWindow()<CR>:Unite file_rec<CR>
 nmap <leader>uv <Esc>:call NEKOGetWindow()<CR>:Unite buffer file_rec<CR>
 
 cnoreabbrev <expr> unite
-            \ ((getcmdtype() == ':' && getcmpdpos() <= 6)? 'Unite' : 'unite')
+            \ ((getcmdtype() == ':' && getcmdpos() <= 6)? 'Unite' : 'unite')
 
 if has('cscope')
     set cscopetag cscopeverbose
