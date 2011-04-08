@@ -41,6 +41,7 @@ set viminfo=
 set showcmd
 set autoread
 set laststatus=2
+set directory=$HOME/.vim/swp//
 source $VIMRUNTIME/mswin.vim
 
 if filereadable("~/.vim/projects/projects.vim")
@@ -59,6 +60,9 @@ let g:Tlist_WinWidth = 24
 let g:Tlist_Compact_Format = 1
 
 call pathogen#runtime_append_all_bundles()
+
+helptags $HOME/.vim/doc
+call pathogen#helptags()
 
 let g:SrcExpl_winHeight = 8
 let g:SrcExpl_refreshTime = 1
@@ -124,6 +128,8 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | d
 nmap <Leader>tag <Esc>:TlistToggle<CR>
 nmap <Leader>nerd <Esc>:NERDTreeToggle<CR>
 nmap <Leader>exp <Esc>:SrcExplToggle<CR>
+nmap <Leader>session <Esc>:SessionList<CR>
+nmap <Leader>proj <Leader>session
 
 nmap <Leader>ide <Esc>:TlistToggle<CR>:NERDTreeToggle<CR><C-W>K<C-W>j<C-W>H<C-W>l<C-W>=:vertical res 24<CR><C-W>h:SrcExplToggle<CR><C-W>j<C-W>v<C-W>l<C-W>r:cope<CR>:set nobuflisted<CR><C-W>k<C-W>c<C-W>j:res 8<CR><C-W>k
 nmap <leader>txt <Esc>:TlistToggle<CR>:NERDTreeToggle<CR>:SrcExplToggle<CR>
