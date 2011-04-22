@@ -66,7 +66,7 @@ set ruler " Show cursor position
 
 " Mapping {{{2
 " Home goes to first non-whitespace character
-map <Home> ^
+nmap <Home> ^
 imap <Home> <Esc>^i
 " }}}2
 
@@ -79,11 +79,20 @@ runtime macros/matchit.vim " Extend % bracket matching
 set background=dark " Use dark background settings
 color zenburn " Zenburn color theme
 set number " Line numbers
+set numberwidth=4 " Line number support up to 4 digits
 set cursorline " Highlight current line
 set laststatus=2 " Always disable the status line
 
 " GUI Settings {{{2
-set guioptions+=b " Enable horizontal scroll bar
+if has("gui_running")
+    set guioptions+=b " Enable horizontal scroll bar
+
+    " Startup Only Settings {{{3
+    if !exists("s:vimrc_loaded")
+        set columns=84 " 80 columns + line numbers
+        set lines=24
+    endif
+    " }}}3
 
     " Linux Settings {{{3
     if s:nix
@@ -102,6 +111,7 @@ set guioptions+=b " Enable horizontal scroll bar
         set guifont=* " Prompt for font
     endif
     " }}}3
+endif
 " }}}2
 " }}}1
 
@@ -195,6 +205,8 @@ call pathogen#runtime_append_all_bundles() " Load all plugin bundles
 
 helptags $HOME/.vim/doc " Tag all help files
 call pathogen#helptags() " Tag all plugin bundle help files
+
+let s:vimrc_loaded = 1
 
 " Autocommands {{{2
 au! BufWritePost .vimrc source % " Reload vimrc on write
@@ -349,8 +361,8 @@ endif
     " Mapping {{{3
         " Windows Mapping {{{4
         if s:win
-            nmap <leader>cscope :!dir *.c *.cpp *.h *.hpp /s /b > cscope > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
-            nmap <leader>phpscope :!dir *.php *.phtml *.ini *.inc /s /b > cscope > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>cscope :!dir *.c *.cpp *.h *.hpp /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>phpscope :!dir *.php *.phtml *.ini *.inc /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
         endif
         " }}}4
         " Linux Mapping {{{4
