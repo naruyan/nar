@@ -1356,7 +1356,7 @@ function! <SID>SrcExpl()
 
 endfunction " }}}
 
-" SrcExpl_P() {{{
+" SrcExpl_Win() {{{
 
 " Gets the Source Explorer window
 
@@ -1381,7 +1381,7 @@ function! <SID>SrcExpl_Win()
 
 endfunction " }}}
 
-" SrcExpl_PGo() {{{
+" SrcExpl_WinGo() {{{
 
 " Goes to the Source Explorer window
 
@@ -1390,8 +1390,8 @@ function! <SID>SrcExpl_WinGo()
     let srcexpl_win = <SID>SrcExpl_Win()
 
     if srcexpl_win == -1
-        let bufnum = bufwinnr(s:SrcExpl_pluginCaption)
-        if bufnum == -1
+        let srcexpl_win = bufwinnr(s:SrcExpl_pluginCaption)
+        if srcexpl_win == -1
             return 0
         endif
     endif
@@ -1402,7 +1402,7 @@ function! <SID>SrcExpl_WinGo()
 
 endfunction " }}}
 
-" SrcExpl_PNew() {{{
+" SrcExpl_WinNew() {{{
 
 " Opens the Source Explorer window
 function! <SID>SrcExpl_WinNew(wincmd)
@@ -1416,12 +1416,13 @@ function! <SID>SrcExpl_WinNew(wincmd)
 
     let srcexpl_win = winnr("$")
     call setwinvar(srcexpl_win, 'srcexpl', 1)
+    let s:SrcExpl_Window = srcexpl_win
 
     return 1
 
 endfunction "  }}}
 
-" SrcExpl_PEdit() {{{
+" SrcExpl_WinEdit() {{{
 
 " Edits the Source Explorer window
 
@@ -1437,7 +1438,7 @@ function! <SID>SrcExpl_WinEdit(wincmd)
 
 endfunction " }}}
 
-" SrcExpl_PClose() {{{
+" SrcExpl_WinClose() {{{
 
 " Closes the Source Explorer window
 
@@ -1453,14 +1454,13 @@ function! <SID>SrcExpl_WinClose()
 
 endfunction " }}}
 
-" SrcExpl_Pre() {{{
+" SrcExpl_WinActive() {{{
 
 " Returns if on the Source Explorer window
 
 function! <SID>SrcExpl_WinActive()
 
-    let srcexpl_win = <SID>SrcExpl_Win()
-    if winnr() == <SID>SrcExpl_Win()
+    if getwinvar(0, 'srcexpl') == 1
         return 1
     endif
     return 0
