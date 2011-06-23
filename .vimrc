@@ -23,6 +23,7 @@ set wildmenu " Command line completion
 set wildmode=list:longest " Shell style command line completion
 set showcmd " Show current command being typed
 set clipboard+=unnamed " Share windows clipboard
+set backspace=indent,eol,start " Normal backspace behaviour
 set noerrorbells " Disable error sounds
 set novisualbell " Disable error blinking
 
@@ -146,11 +147,9 @@ set showmatch " Highlight matching bracket
 set matchtime=5 " Flash matching bracket for 0.5 seconds
 
 " Autocompletion {{{2
-set completeopt=menuone,menu,longest,preview " Autocomplete Settings:
-                                             " - Always display menu
-                                             " - Complete to common match
-                                             " - Show preview window with
-                                             "   extra info
+set completeopt=menuone,menu " Autocomplete Settings:
+                             " - Always display menu
+                             " - Show preview window with
 
     " Autocommands {{{3
     " All included omnicompletion functions
@@ -327,8 +326,46 @@ let g:DirDiffIgnoreCase = 1
 " }}}2
 
 " NeoComplCache {{{2
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_auto_delimiter = 1
+let g:neocomplcache_enable_at_startup = 1 " Enable neocomplcache
+
+" Autocomplete at 3 letters
+let g:neocomplcache_auto_completion_start_length = 3
+let g:neocomplcache_min_keyword_length = 3
+let g:neocomplcache_min_syntax_length = 3
+
+let g:neocomplcache_enable_ignore_case = 1 " Ignore case when completing
+let g:neocomplcache_enable_smart_case = 1 " Selectively ignore case
+
+let g:neocomplcache_enable_auto_select = 1 " Auto select the first canidate
+let g:neocomplcache_enable_auto_delimiter = 1 " Insert delimiters automatically
+
+" Enable abbreviation completions
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+
+" Use dictionary for autocompletion caches
+let g:neocomplcache_dictionary_filetype_lists = {}
+
+" Disable select mode mappings
+let g:neocomplcache_disable_select_mode_mappings = 1
+
+" Enable heavy omni completion.
+if !exists('g:neocomplcache_omni_patterns')
+  let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+    " Mapping {{{3
+    " <C-h>, <BS>: close popup and delete backword char.
+"    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+"    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+"    inoremap <expr><C-y>  neocomplcache#close_popup()
+"    inoremap <expr><C-e>  neocomplcache#cancel_popup()
+    " }}}3
+
 " }}}2
 
 " Ctags {{{2
