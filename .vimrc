@@ -349,12 +349,14 @@ endif
     " Mapping {{{3
         " Windows Mapping {{{4
         if s:win
+            nmap <leader>asmscope :!dir *.c *.cpp *.h *.hpp *.asm /s /b > cscope > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>cscope :!dir *.c *.cpp *.h *.hpp /s /b > cscope > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>phpscope :!dir *.php *.phtml *.ini *.inc /s /b > cscope > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
         endif
         " }}}4
         " Linux Mapping {{{4
         if s:nix
+            nmap <leader>asmscope :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>cscope :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>phpscope :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
         endif
