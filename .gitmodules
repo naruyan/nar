@@ -1,15 +1,15 @@
 [submodule ".vim/bundle/neocomplcache"]
 	path = .vim/bundle/neocomplcache
-	url = https://github.com/Shougo/neocomplcache.git
+	url = git://github.com/Shougo/neocomplcache.git
 [submodule ".vim/bundle/nerdcommenter"]
 	path = .vim/bundle/nerdcommenter
-	url = https://github.com/scrooloose/nerdcommenter.git
+	url = git://github.com/scrooloose/nerdcommenter.git
 [submodule ".vim/bundle/nerdtree"]
 	path = .vim/bundle/nerdtree
-	url = https://github.com/scrooloose/nerdtree.git
+	url = git://github.com/scrooloose/nerdtree.git
 [submodule ".vim/bundle/unite-grep"]
 	path = .vim/bundle/unite-grep
-	url = git://github.com/Shougo/unite-grep.git
+	url = git://github.com/Sixeight/unite-grep.git
 [submodule ".vim/bundle/unite-help"]
 	path = .vim/bundle/unite-help
 	url = git://github.com/tsukkee/unite-help.git
