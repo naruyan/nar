@@ -382,7 +382,7 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " Ctags {{{2
     " Mapping {{{3
-    nmap <leader>ctags <Esc>:!ctags --sort=foldcase -R -I --c++-kinds=+pl --fields=+iaS --extra=+q .<CR>
+    nmap <leader>ctags <Esc>:!ctags --sort=foldcase -R -I --c++-kinds=+pl --python-kinds=-i --fields=+iaS --extra=+q .<CR>
     " }}}3
 " }}}2
 
