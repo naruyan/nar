@@ -117,7 +117,7 @@ endif
 " }}}1
 
 " Files {{{1
-set noautoread " Do not automatically reload files
+set autoread " Automatically reload files
 set fileformats=unix,dos,mac " Support all EOL formats
 if exists("+autochdir")
     set noautochdir " Do not automatically cd to current file
@@ -131,7 +131,9 @@ endif
 
 " Mapping {{{2
 " Sudo write
-cmap w!! %!sudo tee > /dev/null %
+if s:nix
+    cmap w!! %!sudo tee > /dev/null %
+endif
 " Create scratch file
 nmap <Leader>tmp <Esc>:setlocal buftype=nofile<CR>:setlocal bufhidden=hide<CR>:setlocal noswapfile<CR>
 " cd to current file
@@ -182,6 +184,13 @@ set completeopt=menuone,menu " Autocomplete Settings:
 if has("folding")
     set foldenable " Enable folding
     set foldmethod=marker " Use markers to specify folds
+
+" Mapping {{{2
+    " Use Syntax Folding
+    nmap <Leader>fs <Esc>:set foldmethod=syntax<CR>
+    " Use Marker Folding
+    nmap <Leader>fm <Esc>:set foldmethod=marker<CR>
+" }}}2
 endif
 " }}}1
 
@@ -341,14 +350,14 @@ let g:DirDiffIgnoreCase = 1
 let g:neocomplcache_enable_at_startup = 1 " Enable neocomplcache
 
 " Autocomplete at 3 letters
-let g:neocomplcache_auto_completion_start_length = 3
+let g:neocomplcache_auto_completion_start_length = 2
 let g:neocomplcache_min_keyword_length = 3
 let g:neocomplcache_min_syntax_length = 3
 
 let g:neocomplcache_enable_ignore_case = 1 " Ignore case when completing
 let g:neocomplcache_enable_smart_case = 1 " Selectively ignore case
 
-let g:neocomplcache_enable_auto_select = 1 " Auto select the first canidate
+let g:neocomplcache_enable_auto_select = 0 " Do Not Auto select the first canidate
 let g:neocomplcache_enable_auto_delimiter = 1 " Insert delimiters automatically
 
 " Enable abbreviation completions
@@ -361,7 +370,7 @@ let g:neocomplcache_dictionary_filetype_lists = {}
 " Disable select mode mappings
 let g:neocomplcache_disable_select_mode_mappings = 1
 
-" Enable heavy omni completion.
+" Enable heavy omni completion for all default disabled completions
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
@@ -400,12 +409,14 @@ endif
         if s:win
             nmap <leader>cscope :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>phpscope :!dir *.php *.phtml *.ini *.inc /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>javascope :!dir *.java /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
         endif
         " }}}4
         " Linux Mapping {{{4
         if s:nix
             nmap <leader>cscope :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
             nmap <leader>phpscope :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>javascope :!find . -iname '*.java' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
         endif
         " }}}4
     " }}}3
