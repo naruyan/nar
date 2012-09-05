@@ -89,7 +89,7 @@ if has("gui_running")
     set guioptions+=b " Enable horizontal scroll bar
 
     " Startup Only Settings {{{3
-    if !exists("s:vimrc_loaded")
+    if has('vim_starting')
         set columns=84 " 80 columns + line numbers
         set lines=24
     endif
@@ -209,12 +209,49 @@ set directory=$HOME/.vim/swp// " Store all swp files in swp dir
 
 " ---------------------------------------------------------------------------
 " Setup {{{1
-call pathogen#runtime_append_all_bundles() " Load all plugin bundles
+
+if has('vim_starting') && filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
+    set runtimepath+=~/.vim/bundle/neobundle.vim " Load neobundle
+
+    call neobundle#rc(expand('~/.vim/bundle/'))
+
+    NeoBundleLocal ~/.vim/localbundle " Load local bundles
+    
+    " Neobundle
+    NeoBundle 'Shougo/neobundle.vim'
+
+    " Unite
+    NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'Shougo/vimfiler', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'Shougo/unite-ssh', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'tsukkee/unite-help', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'tsukkee/unite-tag', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'thinca/vim-ref'
+
+    " Neocomplcache
+    NeoBundle 'Shougo/neocomplcache'
+
+    " Misc Github
+    NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc'}
+    NeoBundle 'Shougo/vinarise'
+    NeoBundle 'thinca/vim-quickrun'
+    NeoBundle 'naruyan/srcexpl-compat'
+    NeoBundle 'tpope/vim-surround'
+    NeoBundle 'tpope/vim-fugitive'
+    NeoBundle 'Lokaltog/vim-powerline'
+    NeoBundle 'scrooloose/syntastic'
+    NeoBundle 'scrooloose/nerdtree'
+    NeoBundle 'scrooloose/nerdcommenter'
+
+    " Misc vim-scripts
+    NeoBundle 'DirDiff.vim'
+    NeoBundle 'OmniCppComplete'
+    NeoBundle 'sessionman.vim'
+    NeoBundle 'taglist.vim'
+endif
 
 helptags $HOME/.vim/doc " Tag all help files
-call pathogen#helptags() " Tag all plugin bundle help files
-
-let s:vimrc_loaded = 1
 
 " Autocommands {{{2
 au! BufWritePost .vimrc source % " Reload vimrc on write
@@ -233,7 +270,7 @@ au! BufWritePost .vimrc source % " Reload vimrc on write
 " }}}2
 
 " Project {{{2
-if filereadable("~/.vim/projects/projects.vim")
+if filereadable(expand("~/.vim/projects/projects.vim"))
     source ~/.vim/projects/projects.vim
 endif
 " }}}2

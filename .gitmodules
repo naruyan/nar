@@ -1,30 +1,3 @@
-[submodule ".vim/bundle/neocomplcache"]
-	path = .vim/bundle/neocomplcache
-	url = git://github.com/Shougo/neocomplcache.git
-[submodule ".vim/bundle/nerdcommenter"]
-	path = .vim/bundle/nerdcommenter
-	url = git://github.com/scrooloose/nerdcommenter.git
-[submodule ".vim/bundle/nerdtree"]
-	path = .vim/bundle/nerdtree
-	url = git://github.com/scrooloose/nerdtree.git
-[submodule ".vim/bundle/unite-grep"]
-	path = .vim/bundle/unite-grep
-	url = git://github.com/Sixeight/unite-grep.git
-[submodule ".vim/bundle/unite-help"]
-	path = .vim/bundle/unite-help
-	url = git://github.com/tsukkee/unite-help.git
-[submodule ".vim/bundle/unite-tag"]
-	path = .vim/bundle/unite-tag
-	url = git://github.com/tsukkee/unite-tag.git
-[submodule ".vim/bundle/unite.vim"]
-	path = .vim/bundle/unite.vim
-	url = git://github.com/Shougo/unite.vim.git
-[submodule ".vim/bundle/vim-ref"]
-	path = .vim/bundle/vim-ref
-	url = git://github.com/thinca/vim-ref.git
-[submodule ".vim/bundle/vim-surround"]
-	path = .vim/bundle/vim-surround
-	url = https://github.com/tpope/vim-surround.git
 [submodule "d:/Users/jk2lai/.vim/bundle/neobundle.vim"]
 	path = d:/Users/jk2lai/.vim/bundle/neobundle.vim
 	url = git://github.com/Shougo/neobundle.vim
