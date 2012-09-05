@@ -25,3 +25,6 @@
 [submodule ".vim/bundle/vim-surround"]
 	path = .vim/bundle/vim-surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule "d:/Users/jk2lai/.vim/bundle/neobundle.vim"]
+	path = d:/Users/jk2lai/.vim/bundle/neobundle.vim
+	url = git://github.com/Shougo/neobundle.vim
