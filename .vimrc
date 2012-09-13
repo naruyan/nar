@@ -40,6 +40,7 @@ endif
 
 " External Sources {{{2
 source $VIMRUNTIME/mswin.vim " Enable windows bindings
+set keymodel=""
 " }}}2
 " }}}1
 
@@ -150,6 +151,7 @@ set smartcase " Selectively re-enable case sensitivity when searching
 " }}}1
 
 " Encoding {{{1
+set encoding=utf-8 " UTF-8 Encoding
 " }}}1
 
 " Syntax {{{1
@@ -208,12 +210,14 @@ set directory=$HOME/.vim/swp// " Store all swp files in swp dir
 " }}}1
 
 " ---------------------------------------------------------------------------
-" Setup {{{1
+" Plugin Setup {{{1
 
-if has('vim_starting') && filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
-    set runtimepath+=~/.vim/bundle/neobundle.vim " Load neobundle
+if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
+    if has('vim_starting')
+        set runtimepath+=~/.vim/bundle/neobundle.vim " Place neobundle on load path
+    endif
 
-    call neobundle#rc(expand('~/.vim/bundle/'))
+    call neobundle#rc(expand('~/.vim/bundle/')) " Run neobundle
 
     NeoBundleLocal ~/.vim/localbundle " Load local bundles
     
@@ -236,7 +240,7 @@ if has('vim_starting') && filereadable(expand('~/.vim/bundle/neobundle.vim/autol
     NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc'}
     NeoBundle 'Shougo/vinarise'
     NeoBundle 'thinca/vim-quickrun'
-    NeoBundle 'naruyan/srcexpl-compat'
+    NeoBundle 'wesleyche/SrcExpl'
     NeoBundle 'tpope/vim-surround'
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'Lokaltog/vim-powerline'
@@ -254,7 +258,7 @@ endif
 helptags $HOME/.vim/doc " Tag all help files
 
 " Autocommands {{{2
-au! BufWritePost .vimrc source % " Reload vimrc on write
+" au! BufWritePost .vimrc source % " Reload vimrc on write
 " }}}2
 " }}}1
 
@@ -464,6 +468,22 @@ endif
     cnoreabbrev <expr> csf
                 \ ((getcmdtype() == ':' && getcmdpos() <= 4)? 'cs find' : 'csf')
     " }}}3
+" }}}2
+
+" Powerline {{{2
+let g:Powerline_symbols = 'unicode' " Use unicode symbols instead of patched fonts
+
+let g:Powerline_theme = 'default'
+let g:Powerline_colorscheme = 'zenburn'
+let g:Powerline_stl_path_style = 'relative'
+" }}}2
+
+" Vimfiler {{{2
+let g:vimfiler_as_default_explorer = 1
+" }}}2
+
+" Vinarise {{{2
+let g:vinarise_enable_auto_detect = 1
 " }}}2
 " }}}1
 
