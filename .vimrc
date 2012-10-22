@@ -1,5 +1,6 @@
 " vimrc
 " nar
+"  
 " ---------------------------------------------------------------------------
 " 
 
@@ -22,10 +23,13 @@ set hidden " Allow buffers to exist in the background
 set wildmenu " Command line completion
 set wildmode=list:longest " Shell style command line completion
 set showcmd " Show current command being typed
-set clipboard+=unnamed " Share windows clipboard
+set clipboard= " Only explicitly fill the windows clipboard
 set backspace=indent,eol,start " Normal backspace behaviour
 set noerrorbells " Disable error sounds
 set novisualbell " Disable error blinking
+set cmdwinheight=4 " Set command window height
+set selectmode=mouse " select model when selecting with mouse
+set whichwrap=b,s,<,>,[,] " Allow arrow keys to move up and down lines
 
 let mapleader = "\\" " Ensure leader is \
 
@@ -36,12 +40,46 @@ if s:win
     set runtimepath=$HOME/.vim,$VIMRUNTIME " Unify vimfiles location 
                                            " on Linux and Windows
 endif
+
+if !has("unix")
+  set guioptions-=a
+endif
 " }}}2
 
-" External Sources {{{2
-source $VIMRUNTIME/mswin.vim " Enable windows bindings
-set keymodel=""
+" Mapping {{{2
+" Remap Q Commands
+nnoremap q <NOP>
+
+cnoremap <C-F> <C-F>i
+noremap q: <NOP>
+noremap q/ <NOP>
+noremap q? <NOP> 
+
+" Pasting
+map <C-V> "+gP
+cmap <C-V> <C-R>+
+if exists('paste#paste_cmd')
+    exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
+    exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+else
+    inoremap <C-V> <Esc>"+gPa
+endif
+
+" Undo/Redo
+noremap <C-Z> u
+inoremap <C-Z> <C-O>u
+noremap <C-Y> <C-R>
+inoremap <C-Y> <C-O><C-R>
+
+" Select All
+noremap <C-A> gggH<C-O>G
+inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+cnoremap <C-A> <C-C>gggH<C-O>G
+onoremap <C-A> <C-C>gggH<C-O>G
+snoremap <C-A> <C-C>gggH<C-O>G
+xnoremap <C-A> <C-C>ggVG
 " }}}2
+
 " }}}1
 
 " Formatting {{{1
@@ -53,6 +91,12 @@ set softtabstop=4 " Soft tab size is 4
 set linespace=0 " No extra lines between rows
 
 " Mapping {{{2
+" Visual Mode Windows Mode
+vnoremap <BS> d
+vnoremap <C-X> "+x
+vnoremap <C-C> "+y
+noremap <C-Q> <C-V>
+
 " Block tabbing
 xmap <Tab> >gv
 xmap <S-Tab> <gv
@@ -131,12 +175,19 @@ endif
 " }}}2
 
 " Mapping {{{2
+" Windows Saving
+noremap <C-S> :update <CR>
+vnoremap <C-S> <C-C>:update<CR>
+inoremap <C-S> <C-O>:update<CR>
+
 " Sudo write
 if s:nix
     cmap w!! %!sudo tee > /dev/null %
 endif
+
 " Create scratch file
 nmap <Leader>tmp <Esc>:setlocal buftype=nofile<CR>:setlocal bufhidden=hide<CR>:setlocal noswapfile<CR>
+
 " cd to current file
 nmap <Leader>cd <Esc>:cd %:p:h<CR>
 " }}}2
@@ -301,7 +352,7 @@ let g:SrcExpl_pluginList = [
             \ ] 
 let g:SrcExpl_jumpKey = "<ENTER>"
 let g:SrcExpl_gobackKey = "<SPACE>"
-let g:SrcExpl_searchLocalDef = 1
+let g:SrcExpl_searchLocalDef = 0
 let g:SrcExpl_isUpdateTags = 0
 
     " Mapping {{{3
