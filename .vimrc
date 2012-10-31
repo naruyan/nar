@@ -277,7 +277,7 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
 
     " Unite
     NeoBundle 'Shougo/unite.vim'
-    NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
+    NeoBundle 'naruyan/unite-outline', {'depends' : 'Shougo/unite.vim'}
     NeoBundle 'Shougo/vimfiler', {'depends' : 'Shougo/unite.vim'}
     NeoBundle 'Shougo/unite-ssh', {'depends' : 'Shougo/unite.vim'}
     NeoBundle 'tsukkee/unite-help', {'depends' : 'Shougo/unite.vim'}
@@ -483,13 +483,17 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " Ctags {{{2
     " Mapping {{{3
-    nmap <leader>ctags <Esc>:!ctags --sort=foldcase -R -I --c++-kinds=+pl --python-kinds=-i --fields=+iaS --extra=+q .<CR>
+    nmap <leader>ctags <Esc>:!ctags --sort=foldcase -R --c++-kinds=+pl --python-kinds=-i --java-kinds=+l --fields=+iaS --extra=+q <C-R>=getcwd()<CR><CR>
     " }}}3
 " }}}2
 
 " Cscope {{{2
 if has('cscope')
     set cscopetag cscopeverbose
+
+    if executable('mlcscope')
+        set cscopeprg=mlcscope " Use mlcscope if it exists
+    endif
 
     if has('quickfix')
         set cscopequickfix=s-,c-,d-,i-,t-,e-,g-,f-
@@ -499,18 +503,36 @@ endif
     " Mapping {{{3
         " Windows Mapping {{{4
         if s:win
-            nmap <leader>cscope :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
-            nmap <leader>phpscope :!dir *.php *.phtml *.ini *.inc /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
-            nmap <leader>javascope :!dir *.java /s /b > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>csc :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b > cscope.files<CR>
+            nmap <leader>csphp :!dir *.php *.phtml *.ini *.inc /s /b > cscope.files<CR>
+            nmap <leader>csjava :!dir *.java /s /b > cscope.files<CR>
+
+            nmap <leader>csac :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b >> cscope.files<CR>
+            nmap <leader>csaphp :!dir *.php *.phtml *.ini *.inc /s /b >> cscope.files<CR>
+            nmap <leader>csajava :!dir *.java /s /b >> cscope.files<CR>
         endif
         " }}}4
         " Linux Mapping {{{4
         if s:nix
-            nmap <leader>cscope :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
-            nmap <leader>phpscope :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
-            nmap <leader>javascope :!find . -iname '*.java' > cscope.files<CR>:!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>csc :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' > cscope.files<CR>
+            nmap <leader>csphp :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' > cscope.files<CR>
+            nmap <leader>csjava :!find . -iname '*.java' > cscope.files<CR>
+
+            nmap <leader>csac :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' >> cscope.files<CR>
+            nmap <leader>csaphp :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' >> cscope.files<CR>
+            nmap <leader>csajava :!find . -iname '*.java' >> cscope.files<CR>
         endif
         " }}}4
+
+        if executable('mlcscope')
+            nmap <leader>cscope :!mlcscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>cppscope :!mlcscope -b -i cscope.files -f cscope.out -m c++<CR>:cs reset<CR>
+            nmap <leader>javascope :!mlcscope -b -i cscope.files -f cscope.out -m java<CR>:cs reset<CR>
+        else
+            nmap <leader>cscope :!cscope -b -i cscope.files -f cscope.out<CR>:cs reset<CR>
+            nmap <leader>cppscope <leader>cscope<CR>
+            nmap <leader>javascope <leader>cscope<CR>
+        endif
     " }}}3
 
     " Abbreviations {{{3
