@@ -4,6 +4,15 @@
 " ---------------------------------------------------------------------------
 " 
 
+" Todo {{{1
+" Add controls for Vimfiler/Unite-ssh possibly
+" Add more controls for neocomplcache, espesically snippets
+" Vimproc autobuild? Probably not
+" More use on: quickrun, surround, fugitive, nerdcommenter
+" More configuration on powerline?
+" Syntastic configuration
+" }}}1
+
 " Initialization {{{1
 " 
 " vim: set foldenable, foldmethod=marker, foldlevel=0
@@ -29,6 +38,7 @@ set noerrorbells " Disable error sounds
 set novisualbell " Disable error blinking
 set cmdwinheight=4 " Set command window height
 set selectmode=mouse " select model when selecting with mouse
+set selection=old " Do not allow selecting past the current line
 set whichwrap=b,s,<,>,[,] " Allow arrow keys to move up and down lines
 
 let mapleader = "\\" " Ensure leader is \
@@ -123,7 +133,6 @@ runtime macros/matchit.vim " Extend % bracket matching
 
 " UI {{{1
 set background=dark " Use dark background settings
-color zenburn " Zenburn color theme
 set number " Line numbers
 set numberwidth=4 " Line number support up to 4 digits
 set cursorline " Highlight current line
@@ -269,8 +278,6 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
     endif
 
     call neobundle#rc(expand('~/.vim/bundle/')) " Run neobundle
-
-    NeoBundleLocal ~/.vim/localbundle " Load local bundles
     
     " Neobundle
     NeoBundle 'Shougo/neobundle.vim'
@@ -296,17 +303,18 @@ if filereadable(expand('~/.vim/bundle/neobundle.vim/autoload/neobundle.vim'))
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'Lokaltog/vim-powerline'
     NeoBundle 'scrooloose/syntastic'
-    NeoBundle 'scrooloose/nerdtree'
     NeoBundle 'scrooloose/nerdcommenter'
+    NeoBundle 'mikewest/vimroom'
 
     " Misc vim-scripts
     NeoBundle 'DirDiff.vim'
     NeoBundle 'OmniCppComplete'
     NeoBundle 'sessionman.vim'
     NeoBundle 'taglist.vim'
-endif
 
-helptags $HOME/.vim/doc " Tag all help files
+    " Local bundles
+    execute 'NeoBundleLocal' '~/.vim/localbundle' 
+endif
 
 " Autocommands {{{2
 " au! BufWritePost .vimrc source % " Reload vimrc on write
@@ -315,10 +323,15 @@ helptags $HOME/.vim/doc " Tag all help files
 
 " ---------------------------------------------------------------------------
 " Plugins {{{1
+
+" Zenburn Colorscheme {{{2
+color zenburn " Zenburn color theme
+" }}}2
+
 " IDE {{{2
     " Mapping {{{3
-    nmap <Leader>ide <Esc>:TlistToggle<CR>:NERDTreeToggle<CR><C-W>K<C-W>j<C-W>H<C-W>l<C-W>=:vertical res 24<CR><C-W>h:SrcExplToggle<CR><C-W>j<C-W>v<C-W>l<C-W>r:cope<CR>:set nobuflisted<CR><C-W>k<C-W>c<C-W>j:res 8<CR><C-W>k
-    nmap <leader>txt <Esc>:TlistToggle<CR>:NERDTreeToggle<CR>:SrcExplToggle<CR>
+    nmap <Leader>ide <Esc>:TlistToggle<CR><C-W>l<C-W>=:vertical res 24<CR><C-W>h:SrcExplToggle<CR><C-W>j<C-W>v<C-W>l<C-W>r:cope<CR>:set nobuflisted<CR><C-W>k<C-W>c<C-W>j:res 8<CR><C-W>k
+    nmap <leader>txt <Esc>:TlistToggle<CR>:SrcExplToggle<CR>
     nmap <leader>min <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 1<CR>:exe bufwinnr("Source_Explorer") . "wincmd w"<CR>:res 1<CR><C-W>t
     nmap <leader>max <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 24<CR>:exe bufwinnr("Source_Explorer") . "wincmd w"<CR>:res 8<CR><C-W>t
     " }}}3
@@ -360,16 +373,6 @@ let g:SrcExpl_isUpdateTags = 0
     " }}}3
 " }}}2
 
-" NERDTree {{{2
-let g:NERDTreeWinSize = 24
-let g:NERDTreeWinPos = "right" 
-let g:NERDTreeAutoCenter = 0
-
-    " Mapping {{{3
-    nmap <Leader>nerd <Esc>:NERDTreeToggle<CR>
-    " }}}3
-" }}}2
-
 " OmniCppComplete {{{2
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_ShowPrototypeInAbbr = 1
@@ -392,9 +395,24 @@ let g:unite_enable_start_insert = 1
 
     " Mapping {{{3
     nmap <Leader>ub <Esc>:call NEKOGetWindow()<CR>:Unite buffer<CR>
-    nmap <Leader>uf <Esc>:call NEKOGetWindow()<CR>:Unite file<CR>
+    nmap <Leader>uf <Esc>:call NEKOGetWindow()<CR>:Unite file file/new<CR>
     nmap <Leader>uc <Esc>:call NEKOGetWindow()<CR>:Unite file_rec<CR>
     nmap <leader>uv <Esc>:call NEKOGetWindow()<CR>:Unite buffer file_rec<CR>
+
+    imap <C-F> <Esc>:call NEKOGetWindow()<CR>:Unite buffer file_rec<CR>
+    nmap <C-F> <Esc>:call NEKOGetWindow()<CR>:Unite buffer file_rec<CR>
+
+    imap <C-B> <Esc>:call NEKOGetWindow()<CR>:Unite source<CR>
+    nmap <C-B> <Esc>:call NEKOGetWindow()<CR>:Unite source<CR>
+
+    imap <C-B><C-B> <Esc>:call NEKOGetWindow()<CR>:Unite buffer<CR>
+    nmap <C-B><C-B> <Esc>:call NEKOGetWindow()<CR>:Unite buffer<CR>
+
+    imap <C-B><C-F> <Esc>:call NEKOGetWindow()<CR>:Unite file file/new<CR>
+    nmap <C-B><C-F> <Esc>:call NEKOGetWindow()<CR>:Unite file file/new<CR>
+
+    imap <C-B><C-C> <Esc>:call NEKOGetWindow()<CR>:Unite outline<CR>
+    nmap <C-B><C-C> <Esc>:call NEKOGetWindow()<CR>:Unite outline<CR>
     " }}}3
 
     " Abbreviations {{{3
@@ -506,10 +524,12 @@ endif
             nmap <leader>csc :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b > cscope.files<CR>
             nmap <leader>csphp :!dir *.php *.phtml *.ini *.inc /s /b > cscope.files<CR>
             nmap <leader>csjava :!dir *.java /s /b > cscope.files<CR>
+            nmap <leader>cspy :!dir *.py /s /b > cscope.files<CR>
 
             nmap <leader>csac :!dir *.c *.cpp *.h *.hpp *.asm *.s /s /b >> cscope.files<CR>
             nmap <leader>csaphp :!dir *.php *.phtml *.ini *.inc /s /b >> cscope.files<CR>
             nmap <leader>csajava :!dir *.java /s /b >> cscope.files<CR>
+            nmap <leader>csapy :!dir *.py /s /b >> cscope.files<CR>
         endif
         " }}}4
         " Linux Mapping {{{4
@@ -517,10 +537,14 @@ endif
             nmap <leader>csc :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' > cscope.files<CR>
             nmap <leader>csphp :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' > cscope.files<CR>
             nmap <leader>csjava :!find . -iname '*.java' > cscope.files<CR>
+            nmap <leader>cspy :!find . -iname '*.py' > cscope.files<CR>
+
 
             nmap <leader>csac :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.asm' -o -iname '*.s' >> cscope.files<CR>
             nmap <leader>csaphp :!find . -iname '*.php' -o -iname '*.phtml' -o -iname '*.ini' -o -iname '*.inc' >> cscope.files<CR>
             nmap <leader>csajava :!find . -iname '*.java' >> cscope.files<CR>
+            nmap <leader>csapy :!find . -iname '*.py' >> cscope.files<CR>
+
         endif
         " }}}4
 
@@ -558,5 +582,11 @@ let g:vimfiler_as_default_explorer = 1
 " Vinarise {{{2
 let g:vinarise_enable_auto_detect = 1
 " }}}2
+
+" Vimroom {{{2
+let g:vimroom_guibackground = "#3f3f3f"
+let g:vimroom_width = 120
+" }}}2
+
 " }}}1
 
