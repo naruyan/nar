@@ -50,10 +50,6 @@ if s:win
     set runtimepath=$HOME/.vim,$VIMRUNTIME " Unify vimfiles location 
                                            " on Linux and Windows
 endif
-
-if !has("unix")
-  set guioptions-=a
-endif
 " }}}2
 
 " Mapping {{{2
@@ -140,7 +136,7 @@ set laststatus=2 " Always disable the status line
 
 " GUI Settings {{{2
 if has("gui_running")
-    set guioptions+=b " Enable horizontal scroll bar
+    set guioptions=rLb " Enable horizontal scroll bar, Disable Menu
 
     " Startup Only Settings {{{3
     if has('vim_starting')
@@ -195,7 +191,16 @@ if s:nix
 endif
 
 " Create scratch file
-nmap <Leader>tmp <Esc>:setlocal buftype=nofile<CR>:setlocal bufhidden=hide<CR>:setlocal noswapfile<CR>
+nmap <C-N> <Esc>:new<CR>:only<CR>:setlocal buftype=nofile<CR>
+nmap <Leader>tmp <Esc>:setlocal buftype=nofile<CR>
+
+" Save a scratch file
+command! -nargs=1  -complete=file -bang Persist setlocal buftype= | saveas<bang> <args>
+
+cnoreabbrev <expr> pers
+            \ ((getcmdtype() == ':' && getcmdpos() <= 5)? 'Pers' : 'pers')
+cnoreabbrev <expr> persist
+            \ ((getcmdtype() == ':' && getcmdpos() <= 8)? 'Persist' : 'persist')
 
 " cd to current file
 nmap <Leader>cd <Esc>:cd %:p:h<CR>
@@ -330,10 +335,10 @@ color zenburn " Zenburn color theme
 
 " IDE {{{2
     " Mapping {{{3
-    nmap <Leader>ide <Esc>:TlistToggle<CR><C-W>l<C-W>=:vertical res 24<CR><C-W>h:SrcExplToggle<CR><C-W>j<C-W>v<C-W>l<C-W>r:cope<CR>:set nobuflisted<CR><C-W>k<C-W>c<C-W>j:res 8<CR><C-W>k
-    nmap <leader>txt <Esc>:TlistToggle<CR>:SrcExplToggle<CR>
-    nmap <leader>min <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 1<CR>:exe bufwinnr("Source_Explorer") . "wincmd w"<CR>:res 1<CR><C-W>t
-    nmap <leader>max <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 24<CR>:exe bufwinnr("Source_Explorer") . "wincmd w"<CR>:res 8<CR><C-W>t
+    nmap <Leader>ide <Esc>:TlistOpen<CR>:vertical res 24<CR>:SrcExplClose<CR>:SrcExpl<CR>:exe g:SrcExpl_GetWin() "wincmd w"<CR><C-W>v<C-W>l<C-W>r:cope<CR>:set nobuflisted<CR><C-W>k<C-W>c:exe g:SrcExpl_GetWin() "wincmd w"<CR>:res 8<CR><C-W>k
+    nmap <leader>txt <Esc>:TlistClose<CR>:SrcExplClose<CR>:cclose<CR>
+    nmap <leader>min <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 1<CR>:exe g:SrcExpl_GetWin() "wincmd w"<CR>:res 1<CR><C-W>t
+    nmap <leader>max <Esc>:exe bufwinnr("__Tag_List__") . "wincmd w"<CR>:vertical res 24<CR>:exe g:SrcExpl_GetWin() "wincmd w"<CR>:res 8<CR><C-W>t
     " }}}3
 " }}}2
 
@@ -588,5 +593,19 @@ let g:vimroom_guibackground = "#3f3f3f"
 let g:vimroom_width = 120
 " }}}2
 
+" Vimshell {{{2
+let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+let g:vimshell_enable_smart_case = 1
+
+" Windows Settings
+if s:win
+    let g:vimshell_prompt = $USERNAME. "% "
+endif
+" Linux Settings
+if s:nix
+    let g:vimshell_prompt = $USER . "% "
+endif
+
+" }}}2
 " }}}1
 

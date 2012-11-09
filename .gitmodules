@@ -1,3 +1,3 @@
-[submodule "d:/Users/jk2lai/.vim/bundle/neobundle.vim"]
-	path = d:/Users/jk2lai/.vim/bundle/neobundle.vim
+[submodule ".vim/bundle/neobundle.vim"]
+	path = .vim/bundle/neobundle.vim
 	url = git://github.com/Shougo/neobundle.vim
